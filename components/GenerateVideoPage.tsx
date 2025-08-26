@@ -17,10 +17,19 @@ export const GenerateVideoPage: React.FC<GenerateVideoPageProps> = ({
   onCancel,
 }) => {
   const [prompt, setPrompt] = useState('');
+  const [style, setStyle] = useState('');
+  const [cameraMove, setCameraMove] = useState('');
 
   const handleGenerate = () => {
     if (prompt.trim()) {
-      onGenerate(prompt.trim());
+      let fullPrompt = prompt.trim();
+      if (style) {
+        fullPrompt += `\n\nGaya Video: ${style}`;
+      }
+      if (cameraMove) {
+        fullPrompt += `\nGerakan Kamera: ${cameraMove}`;
+      }
+      onGenerate(fullPrompt);
     }
   };
 
@@ -52,6 +61,50 @@ export const GenerateVideoPage: React.FC<GenerateVideoPageProps> = ({
               placeholder="misalnya, Seekor beruang grizzly megah berdiri di sungai deras di gunung, sedang menangkap salmon."
               aria-label="Prompt untuk pembuatan video baru"
             />
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+            <div>
+              <label
+                htmlFor="style"
+                className="block text-sm font-medium text-gray-300 mb-2">
+                Gaya Video (opsional)
+              </label>
+              <select
+                id="style"
+                className="w-full bg-gray-900 border border-gray-700 rounded-lg p-3 text-gray-200 focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-shadow duration-200"
+                value={style}
+                onChange={(e) => setStyle(e.target.value)}>
+                <option value="">Pilih gaya</option>
+                <option value="Sinematik">Sinematik</option>
+                <option value="Anime">Anime</option>
+                <option value="Hitam Putih">Hitam Putih</option>
+                <option value="Timelapse">Timelapse</option>
+                <option value="Stop Motion">Stop Motion</option>
+                <option value="Claymation">Claymation</option>
+                <option value="Fotografi Udara">Fotografi Udara</option>
+              </select>
+            </div>
+            <div>
+              <label
+                htmlFor="camera-move"
+                className="block text-sm font-medium text-gray-300 mb-2">
+                Gerakan Kamera (opsional)
+              </label>
+              <select
+                id="camera-move"
+                className="w-full bg-gray-900 border border-gray-700 rounded-lg p-3 text-gray-200 focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-shadow duration-200"
+                value={cameraMove}
+                onChange={(e) => setCameraMove(e.target.value)}>
+                <option value="">Pilih gerakan</option>
+                <option value="Aerial">Aerial</option>
+                <option value="Panning">Panning</option>
+                <option value="Zoom">Zoom</option>
+                <option value="Tracking Shot">Tracking Shot</option>
+                <option value="Dolly">Dolly</option>
+                <option value="Crane shot">Crane shot</option>
+              </select>
+            </div>
           </div>
         </main>
 
