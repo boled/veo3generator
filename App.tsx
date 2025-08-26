@@ -5,7 +5,7 @@
 import React, {useState} from 'react';
 import {EditVideoPage} from './components/EditVideoPage';
 import {ErrorModal} from './components/ErrorModal';
-import {SparklesIcon, VideoCameraIcon} from './components/icons';
+import {EnvelopeIcon, SparklesIcon, VideoCameraIcon} from './components/icons';
 import {SavingProgressPage} from './components/SavingProgressPage';
 import {VideoGrid} from './components/VideoGrid';
 import {VideoPlayer} from './components/VideoPlayer';
@@ -14,6 +14,7 @@ import {Video} from './types';
 
 import {GeneratedVideo, GoogleGenAI} from '@google/genai';
 import {GenerateVideoPage} from './components/GenerateVideoPage';
+import {ContactModal} from './components/ContactModal';
 
 const VEO_MODEL_NAME = 'veo-2.0-generate-001';
 
@@ -91,6 +92,7 @@ export const App: React.FC = () => {
   const [generationError, setGenerationError] = useState<string[] | null>(
     null,
   );
+  const [isContactModalOpen, setIsContactModalOpen] = useState(false);
 
   const handlePlayVideo = (video: Video) => {
     setPlayingVideo(video);
@@ -196,6 +198,14 @@ export const App: React.FC = () => {
     }
   };
 
+  const handleOpenContactModal = () => {
+    setIsContactModalOpen(true);
+  };
+
+  const handleCloseContactModal = () => {
+    setIsContactModalOpen(false);
+  };
+
   if (isSaving) {
     return <SavingProgressPage />;
   }
@@ -223,7 +233,7 @@ export const App: React.FC = () => {
             <p className="text-gray-400 mt-2 text-lg">
               Pilih video untuk menghasilkan variasi Anda sendiri atau buat yang baru
             </p>
-            <div className="mt-6">
+            <div className="mt-6 flex flex-wrap justify-center gap-4">
               <button
                 onClick={handleStartGenerate}
                 className="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-purple-600 hover:bg-purple-700 text-white font-semibold transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-purple-500 focus-visible:ring-offset-2 focus-visible:ring-offset-gray-900">
@@ -235,6 +245,17 @@ export const App: React.FC = () => {
           <main className="px-4 md:px-8 pb-8">
             <VideoGrid videos={videos} onPlayVideo={handlePlayVideo} />
           </main>
+          <footer className="text-center py-8">
+            <button
+              onClick={handleOpenContactModal}
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-gray-600 hover:bg-gray-700 text-white font-semibold transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-500 focus-visible:ring-offset-2 focus-visible:ring-offset-gray-900">
+              <EnvelopeIcon className="w-5 h-5" />
+              <span>Kontak Hubungi Kami</span>
+            </button>
+            <p className="text-gray-500 text-sm mt-4">
+              &copy; 2024 Galeri Veo. Hak Cipta Dilindungi Undang-Undang.
+            </p>
+          </footer>
         </div>
       )}
 
@@ -253,6 +274,8 @@ export const App: React.FC = () => {
           onSelectKey={async () => await window.aistudio?.openSelectKey()}
         />
       )}
+
+      {isContactModalOpen && <ContactModal onClose={handleCloseContactModal} />}
     </div>
   );
 };
